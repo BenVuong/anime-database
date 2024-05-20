@@ -1,11 +1,13 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./component/homepage";
+import Details from "./component/details";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Homepage />}></Route>
+        <Route path="/anime-database/" element={<Homepage />}></Route>
+        <Route path="/anime-database/details/:id" element={<Details />}></Route>
       </Routes>
     </BrowserRouter>
   );
