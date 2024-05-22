@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import { useParams, Link } from "react-router-dom";
-
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -51,7 +50,7 @@ function Details() {
     setAnime(data.data);
     setInfo({
       ...info,
-      image: data.data.images.jpg.image_url,
+      image: data.data.images.jpg.large_image_url,
       studio: data.data.studios[0].name,
     });
     console.log(data);
@@ -81,6 +80,15 @@ function Details() {
               <Item>Episodes: {anime.episodes}</Item>
               <Item>Type: {anime.type}</Item>
               <Item>Studio: {info.studio}</Item>
+              <Item>
+                <Link
+                  role="button"
+                  className="btn btn-info "
+                  to={`/anime-database/`}
+                >
+                  Back
+                </Link>
+              </Item>
             </Item>
           </Pillar>
         </Grid>
