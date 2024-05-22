@@ -39,12 +39,21 @@ const Pillar = styled("div")(({ theme }) => ({
 function Details() {
   const { id } = useParams();
   const [anime, setAnime] = useState([]);
+  const [info, setInfo] = useState({
+    image: "",
+    studio: "",
+  });
   const API_URL = "https://api.jikan.moe/v4";
 
   async function searchAnime(id) {
     const response = await fetch(`${API_URL}/anime/${id}`);
     const data = await response.json();
     setAnime(data.data);
+    setInfo({
+      ...info,
+      image: data.data.images.jpg.image_url,
+      studio: data.data.studios[0].name,
+    });
     console.log(data);
     console.log(anime);
   }
@@ -53,10 +62,37 @@ function Details() {
     searchAnime(id);
   }, []);
   return (
-    <div>
-      Hello {id}
-      {anime.title}
-    </div>
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={1}>
+        <Grid sm={12}>
+          <Title>
+            {anime.title_english}
+            <div>{anime.title}</div>
+          </Title>
+        </Grid>
+        <Grid xs={15} sm={2}>
+          <Pillar>
+            <Item>
+              <img src={info.image}></img>
+            </Item>
+            <Item>
+              Information:
+              <Divider />
+              <Item>Episodes: {anime.episodes}</Item>
+              <Item>Type: {anime.type}</Item>
+              <Item>Studio: {info.studio}</Item>
+            </Item>
+          </Pillar>
+        </Grid>
+        <Grid xs={12} sm={10}>
+          <Item>
+            Synopsis:
+            <Divider />
+            {anime.synopsis}
+          </Item>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 
