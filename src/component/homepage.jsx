@@ -67,7 +67,10 @@ function Homepage() {
                   <Grid item>{anime.title}</Grid>
                   <Grid item>Score: {anime.score}</Grid>
                   <Grid item>
-                    <img src={anime.images.jpg.image_url}></img>
+                    <img
+                      src={anime.images.jpg.image_url}
+                      style={{ maxWidth: "100%" }}
+                    ></img>
                   </Grid>
                   <Grid item>
                     <Link

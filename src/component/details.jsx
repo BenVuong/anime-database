@@ -73,7 +73,7 @@ function Details() {
         <Grid xs={15} sm={2}>
           <Pillar>
             <Item>
-              <img src={info.image}></img>
+              <img src={info.image} style={{ maxWidth: "100%" }}></img>
             </Item>
             <Item>
               Information:
@@ -89,6 +89,11 @@ function Details() {
             Synopsis:
             <Divider />
             {anime.synopsis}
+          </Item>
+          <Item>
+            Background:
+            <Divider />
+            {anime.background}
           </Item>
         </Grid>
       </Grid>
