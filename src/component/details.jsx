@@ -7,7 +7,7 @@ import Grid from "@mui/material/Grid";
 import Divider from "@mui/material/Divider";
 
 const Title = styled("div")(({ theme }) => ({
-  backgroundColor: "#616161",
+  backgroundColor: "#2e51a2",
   border: "1px solid",
   color: "#fff",
   borderColor: theme.palette.mode === "dark" ? "#444d58" : "#ced7e0",
@@ -38,9 +38,13 @@ const Pillar = styled("div")(({ theme }) => ({
 function Details() {
   const { id } = useParams();
   const [anime, setAnime] = useState([]);
+  {
+    /*info and set info is used to grab objects witin in the data object*/
+  }
   const [info, setInfo] = useState({
     image: "",
     studio: "",
+    genres: [],
   });
   const API_URL = "https://api.jikan.moe/v4";
 
@@ -52,6 +56,7 @@ function Details() {
       ...info,
       image: data.data.images.jpg.large_image_url,
       studio: data.data.studios[0].name,
+      genres: data.data.genres,
     });
     console.log(data);
     console.log(anime);
@@ -77,9 +82,17 @@ function Details() {
             <Item>
               Information:
               <Divider />
-              <Item>Episodes: {anime.episodes}</Item>
               <Item>Type: {anime.type}</Item>
+              <Item>Episodes: {anime.episodes}</Item>
+              <Item>Status: {anime.status}</Item>
+              <Item>
+                Premiered: {anime.season} {anime.year}
+              </Item>
               <Item>Studio: {info.studio}</Item>
+              <Item>
+                {/*display the values as of one line with comma seperation*/}
+                Genres: {info.genres?.map((genres) => genres.name).join(", ")}
+              </Item>
               <Item>
                 <Link
                   role="button"

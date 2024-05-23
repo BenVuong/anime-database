@@ -3,7 +3,7 @@ import { Grid, Card, InputLabel, TextField, CardContent } from "@mui/material";
 import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 const Title = styled("div")(({ theme }) => ({
-  backgroundColor: "#616161",
+  backgroundColor: "#2e51a2",
   border: "1px solid",
   color: "#fff",
   borderColor: theme.palette.mode === "dark" ? "#444d58" : "#ced7e0",
@@ -17,11 +17,14 @@ function Homepage() {
   const [pageNum, setPageNum] = useState(1);
   const [searchAnimeName, setSearchAnimeName] = useState("");
   const API_URL = "https://api.jikan.moe/v4";
-
+  const [info, setInfo] = useState([]);
   const getTopAnime = async () => {
-    const response = await fetch(`${API_URL}/top/anime?`);
+    const response = await fetch(`${API_URL}/top/anime?page=1`);
+
     setAnimeData(await response.json());
     console.log(animeData);
+    setInfo(animeData.pagination);
+    console.log(info);
   };
   const getPopularAnime = async () => {
     const response = await fetch(`${API_URL}/top/anime?filter=bypopularity`);
@@ -53,6 +56,8 @@ function Homepage() {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Title>Anime Database</Title>
+          <button onClick={getTopAnime}>Top anime</button>
+          <button onClick={getPopularAnime}>Popular anime</button>
         </Grid>
         <Grid item xs={12}>
           <form onSubmit={handleSearchSubmit}>
@@ -64,10 +69,7 @@ function Homepage() {
 
             <button className="btn btn-success"> Search Anime</button>
           </form>
-          <button onClick={getTopAnime}>Top anime</button>
-          <button onClick={getPopularAnime}>Popular anime</button>
         </Grid>
-        <Grid item xs={12}></Grid>
         {animeData.data?.map((anime) => {
           return (
             <Grid item xs={5} sm={3}>
