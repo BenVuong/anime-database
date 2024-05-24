@@ -46,6 +46,7 @@ const Pillar = styled("div")(({ theme }) => ({
 
 function Details() {
   const { id } = useParams();
+  const [showMore, setShowMore] = useState(false);
   const [review, setReview] = useState([]);
   const [anime, setAnime] = useState([]);
   {
@@ -147,12 +148,22 @@ function Details() {
                 Reviews
               </AccordionSummary>
               <AccordionDetails>
-                {review.data?.slice(0, 3).map((anime) => {
+                {review.data?.slice(0, 5).map((anime) => {
                   return (
                     <Card>
                       <CardContent>
                         <div>Score: {anime.score}</div>
-                        <div>{anime.review}</div>
+                        <div>
+                          {showMore
+                            ? anime.review
+                            : `${anime.review.substring(0, 512) + " . . . "}`}
+                          <button
+                            className="btn"
+                            onClick={() => setShowMore(!showMore)}
+                          >
+                            Show more
+                          </button>
+                        </div>
                       </CardContent>
                     </Card>
                   );
