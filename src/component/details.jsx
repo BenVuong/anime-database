@@ -2,9 +2,18 @@ import React, { useEffect, useState } from "react";
 
 import { useParams, Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Divider from "@mui/material/Divider";
+import {
+  Box,
+  Grid,
+  Divider,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  ExpandMoreIcon,
+  Button,
+  Card,
+  CardContent,
+} from "@mui/material";
 
 const Title = styled("div")(({ theme }) => ({
   backgroundColor: "#2e51a2",
@@ -37,6 +46,7 @@ const Pillar = styled("div")(({ theme }) => ({
 
 function Details() {
   const { id } = useParams();
+  const [review, setReview] = useState([]);
   const [anime, setAnime] = useState([]);
   {
     /*info and set info is used to grab objects witin in the data object*/
@@ -45,6 +55,7 @@ function Details() {
     image: "",
     studio: "",
     genres: [],
+    review: "",
   });
   const API_URL = "https://api.jikan.moe/v4";
 
@@ -62,8 +73,16 @@ function Details() {
     console.log(anime);
   }
 
+  async function getReviews(id) {
+    const response = await fetch(`${API_URL}/anime/${id}/reviews?limit=1`);
+    const data = await response.json();
+    setReview(data);
+    console.log(review);
+  }
+
   useEffect(() => {
     searchAnime(id);
+    getReviews(id);
   }, []);
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -107,6 +126,9 @@ function Details() {
         </Grid>
         <Grid xs={12} sm={10}>
           <Item>
+            <h5>Score: {anime.score}</h5>
+          </Item>
+          <Item>
             Synopsis:
             <Divider />
             {anime.synopsis}
@@ -115,6 +137,28 @@ function Details() {
             Background:
             <Divider />
             {anime.background}
+          </Item>
+          <Item>
+            <Accordion>
+              <AccordionSummary
+                aria-controls="panel1-content"
+                id="panel1-header"
+              >
+                Reviews
+              </AccordionSummary>
+              <AccordionDetails>
+                {review.data?.slice(0, 3).map((anime) => {
+                  return (
+                    <Card>
+                      <CardContent>
+                        <div>Score: {anime.score}</div>
+                        <div>{anime.review}</div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </AccordionDetails>
+            </Accordion>
           </Item>
         </Grid>
       </Grid>
