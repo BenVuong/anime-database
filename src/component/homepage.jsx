@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Card, InputLabel, TextField, CardContent } from "@mui/material";
 import { Link } from "react-router-dom";
-import { styled } from "@mui/material/styles";
-const Title = styled("div")(({ theme }) => ({
-  backgroundColor: "#2e51a2",
-  border: "1px solid",
-  color: "#fff",
-  borderColor: theme.palette.mode === "dark" ? "#444d58" : "#ced7e0",
-  padding: theme.spacing(1),
-  borderRadius: "4px",
-  textAlign: "left",
-  fontSize: "30px",
-}));
+import { Title } from "./style";
+
 function Homepage() {
   const [animeData, setAnimeData] = useState([]);
   const [pageNum, setPageNum] = useState(1);
