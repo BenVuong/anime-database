@@ -1,3 +1,4 @@
+import { Review } from "./review";
 import React, { useEffect, useState } from "react";
 
 import { useParams, Link } from "react-router-dom";
@@ -9,10 +10,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  ExpandMoreIcon,
-  Button,
   Card,
-  CardContent,
 } from "@mui/material";
 
 const Title = styled("div")(({ theme }) => ({
@@ -46,7 +44,7 @@ const Pillar = styled("div")(({ theme }) => ({
 
 function Details() {
   const { id } = useParams();
-  const [showMore, setShowMore] = useState(false);
+
   const [review, setReview] = useState([]);
   const [anime, setAnime] = useState([]);
   {
@@ -151,20 +149,7 @@ function Details() {
                 {review.data?.slice(0, 5).map((anime) => {
                   return (
                     <Card>
-                      <CardContent>
-                        <div>Score: {anime.score}</div>
-                        <div>
-                          {showMore
-                            ? anime.review
-                            : `${anime.review.substring(0, 512) + " . . . "}`}
-                          <button
-                            className="btn"
-                            onClick={() => setShowMore(!showMore)}
-                          >
-                            Show more
-                          </button>
-                        </div>
-                      </CardContent>
+                      <Review anime={anime} />
                     </Card>
                   );
                 })}
