@@ -43,7 +43,7 @@ function Details() {
   }
 
   async function getReviews(id) {
-    const response = await fetch(`${API_URL}/anime/${id}/reviews?limit=1`);
+    const response = await fetch(`${API_URL}/anime/${id}/reviews`);
     const data = await response.json();
     setReview(data);
     console.log(review);

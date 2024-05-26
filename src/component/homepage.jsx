@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Card, InputLabel, TextField, CardContent } from "@mui/material";
+import {
+  Grid,
+  Card,
+  TextField,
+  CardContent,
+  CardHeader,
+  Button,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { Title } from "./style";
 
@@ -47,8 +54,12 @@ function Homepage() {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Title>Anime Database</Title>
-          <button onClick={getTopAnime}>Top anime</button>
-          <button onClick={getPopularAnime}>Popular anime</button>
+          <Button variant="contained" onClick={getTopAnime}>
+            Top anime
+          </Button>
+          <Button variant="contained" onClick={getPopularAnime}>
+            Popular anime
+          </Button>
         </Grid>
         <Grid item xs={12}>
           <form onSubmit={handleSearchSubmit}>
@@ -66,10 +77,10 @@ function Homepage() {
             <Grid item xs={5} sm={3}>
               <Card>
                 <CardContent>
-                  <Grid item>
-                    <h2>{anime.title_english}</h2>
-                  </Grid>
-                  <Grid item>{anime.title}</Grid>
+                  <CardHeader
+                    title={anime.title_english}
+                    subheader={anime.title}
+                  ></CardHeader>
                   <Grid item>Score: {anime.score}</Grid>
                   <Grid item>
                     <img
