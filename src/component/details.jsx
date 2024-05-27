@@ -10,11 +10,13 @@ import {
   AccordionDetails,
   AccordionSummary,
   Card,
+  CardContent,
+  CardHeader,
 } from "@mui/material";
 
 function Details() {
   const { id } = useParams();
-
+  const [recommendations, setRecommendations] = useState([]);
   const [review, setReview] = useState([]);
   const [anime, setAnime] = useState([]);
   {
@@ -49,9 +51,19 @@ function Details() {
     console.log(review);
   }
 
-  useEffect(() => {
+  async function getRecommendations(id) {
+    const response = await fetch(`${API_URL}/anime/${id}/recommendations`);
+    const data = await response.json();
+    setRecommendations(data);
+  }
+
+  async function setUp(id) {
     searchAnime(id);
     getReviews(id);
+    getRecommendations(id);
+  }
+  useEffect(() => {
+    setUp(id);
   }, []);
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -123,6 +135,40 @@ function Details() {
                     </Card>
                   );
                 })}
+              </AccordionDetails>
+            </Accordion>
+          </Item>
+          <Item>
+            <Accordion defaultExpanded>
+              <AccordionSummary
+                aria-controls="panel1-content"
+                id="panel2-header"
+              >
+                Recommendations
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container wrap="nowrap">
+                  {recommendations.data?.slice(0, 5).map((anime) => {
+                    return (
+                      <Grid item xs={4}>
+                        <Card>
+                          <CardHeader title={anime.entry.title}></CardHeader>
+                          <CardContent>
+                            <img src={anime.entry.images.jpg.image_url} />
+                            <button
+                              className="btn btn-info "
+                              onClick={() => {
+                                setUp(anime.entry.mal_id);
+                              }}
+                            >
+                              Details
+                            </button>
+                          </CardContent>
+                        </Card>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
               </AccordionDetails>
             </Accordion>
           </Item>

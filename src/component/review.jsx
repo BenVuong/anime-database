@@ -5,7 +5,7 @@ export function Review({ anime }) {
   return (
     <CardContent>
       <div>Score: {anime.score}</div>
-      <text>
+      <div>
         {showMore
           ? anime.review
           : `${anime.review.substring(0, 512) + " . . . "}`}
@@ -16,7 +16,7 @@ export function Review({ anime }) {
         >
           {showMore ? "Show Less" : "Show More"}
         </Button>
-      </text>
+      </div>
     </CardContent>
   );
 }
