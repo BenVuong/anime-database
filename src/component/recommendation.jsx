@@ -4,7 +4,10 @@ function Recommendation({ anime, setUp }) {
   return (
     <Grid item xs={4}>
       <Card>
-        <CardHeader title={anime.entry.title}></CardHeader>
+        <CardHeader
+          title={anime.entry.title}
+          style={{ maxWidth: "100%" }}
+        ></CardHeader>
         <CardContent>
           <img src={anime.entry.images.jpg.image_url} />
           <button

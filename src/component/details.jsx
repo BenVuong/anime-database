@@ -18,6 +18,7 @@ import {
 function Details() {
   const { id } = useParams();
   const [recommendations, setRecommendations] = useState([]);
+  const [characters, setCharacters] = useState([]);
   const [review, setReview] = useState([]);
   const [anime, setAnime] = useState([]);
   {
@@ -46,6 +47,13 @@ function Details() {
   }
 
   async function getReviews(id) {
+    const response = await fetch(`${API_URL}/anime/${id}/characters`);
+    const data = await response.json();
+    setCharacters(data);
+    console.log(characters);
+  }
+
+  async function getCharacters(id) {
     const response = await fetch(`${API_URL}/anime/${id}/reviews`);
     const data = await response.json();
     setReview(data);
@@ -62,6 +70,7 @@ function Details() {
     searchAnime(id);
     getReviews(id);
     getRecommendations(id);
+    getReviews(id);
   }
   useEffect(() => {
     setUp(id);
@@ -136,6 +145,34 @@ function Details() {
                     </Card>
                   );
                 })}
+              </AccordionDetails>
+            </Accordion>
+          </Item>
+          <Item>
+            <Accordion defaultExpanded>
+              <AccordionSummary
+                aria-controls="panel1-content"
+                id="panel2-header"
+              >
+                Characters
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container wrap="nowrap">
+                  {characters.data?.slice(0, 5).map((anime) => {
+                    return (
+                      <Card>
+                        <CardHeader
+                          title={anime.character.name}
+                          subheader={anime.role}
+                        ></CardHeader>
+                        <img
+                          src={anime.character.images.jpg.image_url}
+                          style={{ maxWidth: "100%" }}
+                        ></img>
+                      </Card>
+                    );
+                  })}
+                </Grid>
               </AccordionDetails>
             </Accordion>
           </Item>
