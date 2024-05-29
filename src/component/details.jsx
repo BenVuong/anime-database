@@ -2,6 +2,7 @@ import { Review } from "./review";
 import React, { useEffect, useState } from "react";
 import { Title, Pillar, Item } from "./style";
 import { useParams, Link } from "react-router-dom";
+import Recommendation from "./recommendation.jsx";
 import {
   Box,
   Grid,
@@ -131,7 +132,7 @@ function Details() {
                 {review.data?.slice(0, 5).map((anime) => {
                   return (
                     <Card>
-                      <Review anime={anime} />
+                      <Review anime={anime} setUp={setUp} />
                     </Card>
                   );
                 })}
@@ -147,26 +148,9 @@ function Details() {
                 Recommendations
               </AccordionSummary>
               <AccordionDetails>
-                <Grid container wrap="nowrap">
-                  {recommendations.data?.slice(0, 5).map((anime) => {
-                    return (
-                      <Grid item xs={4}>
-                        <Card>
-                          <CardHeader title={anime.entry.title}></CardHeader>
-                          <CardContent>
-                            <img src={anime.entry.images.jpg.image_url} />
-                            <button
-                              className="btn btn-info "
-                              onClick={() => {
-                                setUp(anime.entry.mal_id);
-                              }}
-                            >
-                              Details
-                            </button>
-                          </CardContent>
-                        </Card>
-                      </Grid>
-                    );
+                <Grid container wrap="nowrap" sx={{ overflowX: "scroll" }}>
+                  {recommendations.data?.map((anime) => {
+                    return <Recommendation anime={anime} setUp={setUp} />;
                   })}
                 </Grid>
               </AccordionDetails>
