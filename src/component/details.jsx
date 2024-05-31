@@ -46,14 +46,14 @@ function Details() {
     console.log(anime);
   }
 
-  async function getReviews(id) {
+  async function getCharacters(id) {
     const response = await fetch(`${API_URL}/anime/${id}/characters`);
     const data = await response.json();
     setCharacters(data);
     console.log(characters);
   }
 
-  async function getCharacters(id) {
+  async function getReviews(id) {
     const response = await fetch(`${API_URL}/anime/${id}/reviews`);
     const data = await response.json();
     setReview(data);
@@ -71,6 +71,7 @@ function Details() {
     getReviews(id);
     getRecommendations(id);
     getReviews(id);
+    getCharacters(id);
   }
   useEffect(() => {
     setUp(id);
