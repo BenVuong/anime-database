@@ -20,14 +20,12 @@ function Homepage() {
     const response = await fetch(`${API_URL}/top/anime?page=1`);
 
     setAnimeData(await response.json());
-    console.log(animeData);
+
     setInfo(animeData.pagination);
-    console.log(info);
   };
   const getPopularAnime = async () => {
     const response = await fetch(`${API_URL}/top/anime?filter=bypopularity`);
     setAnimeData(await response.json());
-    console.log(animeData);
   };
 
   useEffect(() => {
@@ -46,7 +44,6 @@ function Homepage() {
     const response = await fetch(`${API_URL}/anime?q=${search}`);
     const data = await response.json();
     setAnimeData(data);
-    console.log(animeData);
   }
 
   return (

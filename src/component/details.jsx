@@ -154,7 +154,7 @@ function Details() {
                 aria-controls="panel1-content"
                 id="panel2-header"
               >
-                Characters
+                Characters and Voice Actors
               </AccordionSummary>
               <AccordionDetails>
                 <Grid container wrap="nowrap">
@@ -165,9 +165,19 @@ function Details() {
                           title={anime.character.name}
                           subheader={anime.role}
                         ></CardHeader>
+                        <CardContent>
+                          {/*Currently just get the first voice actor so launages may be different from each character */}
+                          {/*Will add a show more page to see all of the voice actors of each lanuage */}
+                          {/* Might add a seperate character page to show full list of voice actors*/}
+                          {anime.voice_actors[0].person.name} -{" "}
+                          {anime.voice_actors[0].language}
+                        </CardContent>
                         <img
                           src={anime.character.images.jpg.image_url}
-                          style={{ maxWidth: "100%" }}
+                          style={{
+                            width: "auto",
+                            height: "256px",
+                          }}
                         ></img>
                       </Card>
                     );
