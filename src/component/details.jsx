@@ -70,7 +70,6 @@ function Details() {
     searchAnime(id);
     getReviews(id);
     getRecommendations(id);
-    getReviews(id);
     getCharacters(id);
   }
   useEffect(() => {
