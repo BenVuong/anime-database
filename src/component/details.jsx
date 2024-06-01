@@ -42,22 +42,18 @@ function Details() {
       studio: data.data.studios[0].name,
       genres: data.data.genres,
     });
-    console.log(data);
-    console.log(anime);
   }
 
   async function getCharacters(id) {
     const response = await fetch(`${API_URL}/anime/${id}/characters`);
     const data = await response.json();
     setCharacters(data);
-    console.log(characters);
   }
 
   async function getReviews(id) {
     const response = await fetch(`${API_URL}/anime/${id}/reviews`);
     const data = await response.json();
     setReview(data);
-    console.log(review);
   }
 
   async function getRecommendations(id) {
