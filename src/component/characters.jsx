@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import "./../App.css";
 function Characters() {
   const { id } = useParams();
   const API_URL = "https://api.jikan.moe/v4";
@@ -14,7 +15,12 @@ function Characters() {
     getCharacters(id);
     console.log(characterInfo);
   }, []);
-  return <div>{characterInfo.name}</div>;
+  return (
+    <div>
+      {characterInfo.name}
+      <div className="card-text">{characterInfo.about}</div>
+    </div>
+  );
 }
 
 export default Characters;

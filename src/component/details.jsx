@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Title, Pillar, Item } from "./style";
 import { useParams, Link } from "react-router-dom";
 import Recommendation from "./recommendation.jsx";
+import "./../App.css";
 import {
   Box,
   Grid,
@@ -14,6 +15,18 @@ import {
   CardContent,
   CardHeader,
 } from "@mui/material";
+
+const debounce = (func, delay) => {
+  let timeOutID;
+  return (...args) => {
+    if (timeOutID) {
+      clearTimeout(timeOutID);
+    }
+    timeOutID = setTimeout(() => {
+      func.appy(null, args);
+    }, delay);
+  };
+};
 
 function Details() {
   const { id } = useParams();
