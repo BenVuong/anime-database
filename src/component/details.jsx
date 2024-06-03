@@ -1,5 +1,5 @@
 import { Review } from "./review";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Title, Pillar, Item } from "./style";
 import { useParams, Link } from "react-router-dom";
 import Recommendation from "./recommendation.jsx";
@@ -45,8 +45,13 @@ function Details() {
   });
   const API_URL = "https://api.jikan.moe/v4";
 
-  async function searchAnime(id) {
+  const searchAnime = async (id) => {
     const response = await fetch(`${API_URL}/anime/${id}`);
+
+    if (!response.ok) {
+      throw new Error("Request Failed for searchAnime");
+    }
+
     const data = await response.json();
     setAnime(data.data);
     setInfo({
@@ -55,25 +60,35 @@ function Details() {
       studio: data.data.studios[0].name,
       genres: data.data.genres,
     });
-  }
+  };
 
-  async function getCharacters(id) {
+  const getCharacters = async (id) => {
     const response = await fetch(`${API_URL}/anime/${id}/characters`);
+    if (!response.ok) {
+      throw new Error("Request Failed for getCharacters");
+    }
     const data = await response.json();
     setCharacters(data);
-  }
+  };
 
-  async function getReviews(id) {
+  const getReviews = async (id) => {
     const response = await fetch(`${API_URL}/anime/${id}/reviews`);
+    if (!response.ok) {
+      throw new Error("Request Failed for getReviews");
+    }
     const data = await response.json();
     setReview(data);
-  }
+  };
 
-  async function getRecommendations(id) {
+  const getRecommendations = async (id) => {
     const response = await fetch(`${API_URL}/anime/${id}/recommendations`);
+
+    if (!response.ok) {
+      throw new Error("Request Failed for getRecommendations");
+    }
     const data = await response.json();
     setRecommendations(data);
-  }
+  };
 
   async function setUp(id) {
     searchAnime(id);
