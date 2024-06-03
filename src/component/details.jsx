@@ -18,14 +18,21 @@ import {
 
 const debounce = (func, delay) => {
   let timeOutID;
-  return (...args) => {
+  const debouncedFunction = (...args) => {
     if (timeOutID) {
       clearTimeout(timeOutID);
     }
     timeOutID = setTimeout(() => {
-      func.appy(null, args);
+      func(...args);
     }, delay);
   };
+
+  debouncedFunction.cancel = () => {
+    if (timeOutID) {
+      clearTimeout(timeOutID);
+    }
+  };
+  return debouncedFunction;
 };
 
 function Details() {
@@ -34,6 +41,7 @@ function Details() {
   const [characters, setCharacters] = useState([]);
   const [review, setReview] = useState([]);
   const [anime, setAnime] = useState([]);
+
   {
     /*info and set info is used to grab objects witin in the data object*/
   }
@@ -91,14 +99,27 @@ function Details() {
   };
 
   async function setUp(id) {
-    searchAnime(id);
-    getReviews(id);
-    getRecommendations(id);
-    getCharacters(id);
+    await searchAnime(id);
+    await new Promise((resolve) => setTimeout(resolve, 100)); // 100ms debounce
+    await getReviews(id);
+    await new Promise((resolve) => setTimeout(resolve, 100)); // 100ms debounce
+    await getRecommendations(id);
+    await new Promise((resolve) => setTimeout(resolve, 100)); // 100ms debounce
+    await getCharacters(id);
   }
+
+  const debouncedSetUp = useCallback(
+    debounce((id) => setUp(id), 300),
+    []
+  );
+
   useEffect(() => {
-    setUp(id);
-  }, []);
+    debouncedSetUp(id);
+    return () => {
+      debouncedSetUp.cancel();
+    };
+  }, [debouncedSetUp, id]);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1}>
@@ -111,7 +132,7 @@ function Details() {
         <Grid xs={15} sm={2}>
           <Pillar>
             <Item>
-              <img src={info.image} style={{ maxWidth: "100%" }}></img>
+              <img src={info.image} style={{ maxWidth: "100%" }} alt="anime" />
             </Item>
             <Item>
               Information:
@@ -130,7 +151,7 @@ function Details() {
               <Item>
                 <Link
                   role="button"
-                  className="btn btn-info "
+                  className="btn btn-info"
                   to={`/anime-database/`}
                 >
                   Back
@@ -164,7 +185,7 @@ function Details() {
               <AccordionDetails>
                 {review.data?.slice(0, 5).map((anime) => {
                   return (
-                    <Card>
+                    <Card key={anime.mal_id}>
                       <Review anime={anime} setUp={setUp} />
                     </Card>
                   );
@@ -184,7 +205,7 @@ function Details() {
                 <Grid container wrap="nowrap">
                   {characters.data?.slice(0, 5).map((anime) => {
                     return (
-                      <Card>
+                      <Card key={anime.character.mal_id}>
                         <CardHeader
                           title={anime.character.name}
                           subheader={anime.role}
@@ -202,7 +223,8 @@ function Details() {
                             width: "auto",
                             height: "256px",
                           }}
-                        ></img>
+                          alt={anime.character.name}
+                        />
                       </Card>
                     );
                   })}
@@ -214,14 +236,20 @@ function Details() {
             <Accordion defaultExpanded>
               <AccordionSummary
                 aria-controls="panel1-content"
-                id="panel2-header"
+                id="panel3-header"
               >
                 Recommendations
               </AccordionSummary>
               <AccordionDetails>
                 <Grid container wrap="nowrap" sx={{ overflowX: "scroll" }}>
                   {recommendations.data?.map((anime) => {
-                    return <Recommendation anime={anime} setUp={setUp} />;
+                    return (
+                      <Recommendation
+                        key={anime.mal_id}
+                        anime={anime}
+                        setUp={setUp}
+                      />
+                    );
                   })}
                 </Grid>
               </AccordionDetails>
