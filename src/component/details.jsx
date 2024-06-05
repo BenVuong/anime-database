@@ -41,10 +41,10 @@ function Details() {
   const [characters, setCharacters] = useState([]);
   const [review, setReview] = useState([]);
   const [anime, setAnime] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  {
-    /*info and set info is used to grab objects witin in the data object*/
-  }
+  /*info and set info is used to grab objects witin in the data object*/
   const [info, setInfo] = useState({
     image: "",
     studio: "",
@@ -98,18 +98,25 @@ function Details() {
     setRecommendations(data);
   };
 
-  async function setUp(id) {
-    await searchAnime(id);
-    await new Promise((resolve) => setTimeout(resolve, 100)); // 100ms debounce
-    await getReviews(id);
-    await new Promise((resolve) => setTimeout(resolve, 100)); // 100ms debounce
-    await getRecommendations(id);
-    await new Promise((resolve) => setTimeout(resolve, 100)); // 100ms debounce
-    await getCharacters(id);
-  }
+  const setUp = async (id) => {
+    setLoading(true);
+    try {
+      await searchAnime(id);
+      await new Promise((resolve) => setTimeout(resolve, 50)); // 50ms debounce
+      await getReviews(id);
+      await new Promise((resolve) => setTimeout(resolve, 50)); // 50ms debounce
+      await getRecommendations(id);
+      await new Promise((resolve) => setTimeout(resolve, 50)); // 50ms debounce
+      await getCharacters(id);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const debouncedSetUp = useCallback(
-    debounce((id) => setUp(id), 300),
+    debounce((id) => setUp(id), 50),
     []
   );
 
@@ -119,6 +126,9 @@ function Details() {
       debouncedSetUp.cancel();
     };
   }, [debouncedSetUp, id]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <Box sx={{ flexGrow: 1 }}>
