@@ -235,6 +235,13 @@ function Details() {
                           }}
                           alt={anime.character.name}
                         />
+                        <Link
+                          role="button"
+                          className="btn btn-info "
+                          to={`/anime-database/characters/${anime.character.mal_id}`}
+                        >
+                          Details
+                        </Link>
                       </Card>
                     );
                   })}
