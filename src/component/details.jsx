@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Title, Pillar, Item } from "./style";
 import { useParams, Link } from "react-router-dom";
 import Recommendation from "./recommendation.jsx";
+import CharacterCards from "./characterCards.jsx";
 import "./../App.css";
 import {
   Box,
@@ -102,11 +103,11 @@ function Details() {
     setLoading(true);
     try {
       await searchAnime(id);
-      await new Promise((resolve) => setTimeout(resolve, 50)); // 50ms debounce
+      await new Promise((resolve) => setTimeout(resolve, 10)); // 10ms debounce
       await getReviews(id);
-      await new Promise((resolve) => setTimeout(resolve, 50)); // 50ms debounce
+      await new Promise((resolve) => setTimeout(resolve, 10)); // 10ms debounce
       await getRecommendations(id);
-      await new Promise((resolve) => setTimeout(resolve, 50)); // 50ms debounce
+      await new Promise((resolve) => setTimeout(resolve, 10)); // 10ms debounce
       await getCharacters(id);
     } catch (err) {
       setError(err);
@@ -116,7 +117,7 @@ function Details() {
   };
 
   const debouncedSetUp = useCallback(
-    debounce((id) => setUp(id), 50),
+    debounce((id) => setUp(id), 10),
     []
   );
 
@@ -209,41 +210,13 @@ function Details() {
                 aria-controls="panel1-content"
                 id="panel2-header"
               >
-                Characters and Voice Actors
+                Characters
               </AccordionSummary>
               <AccordionDetails>
-                <Grid container wrap="nowrap">
-                  {characters.data?.slice(0, 5).map((anime) => {
-                    return (
-                      <Card key={anime.character.mal_id}>
-                        <CardHeader
-                          title={anime.character.name}
-                          subheader={anime.role}
-                        ></CardHeader>
-                        <CardContent>
-                          {/*Currently just get the first voice actor so launages may be different from each character */}
-                          {/*Will add a show more page to see all of the voice actors of each lanuage */}
-                          {/* Might add a seperate character page to show full list of voice actors*/}
-                          {anime.voice_actors[0].person.name} -{" "}
-                          {anime.voice_actors[0].language}
-                        </CardContent>
-                        <img
-                          src={anime.character.images.jpg.image_url}
-                          style={{
-                            width: "auto",
-                            height: "256px",
-                          }}
-                          alt={anime.character.name}
-                        />
-                        <Link
-                          role="button"
-                          className="btn btn-info "
-                          to={`/anime-database/characters/${anime.character.mal_id}`}
-                        >
-                          Details
-                        </Link>
-                      </Card>
-                    );
+                <Grid container>
+                  {/*add a show more characters button to show all characters*/}
+                  {characters.data?.slice(0, 12).map((anime) => {
+                    return <CharacterCards anime={anime} />;
                   })}
                 </Grid>
               </AccordionDetails>

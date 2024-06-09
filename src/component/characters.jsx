@@ -35,7 +35,9 @@ function Characters() {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1}>
         <Grid sm={12}>
-          <Title>{characterInfo.name}</Title>
+          <Title>
+            {characterInfo.name} {characterInfo.name_kanji}
+          </Title>
         </Grid>
         <Grid xs={15} sm={2}>
           <Pillar>
@@ -45,7 +47,12 @@ function Characters() {
             <Item>
               Animeography:
               <Divider />
-              <Item></Item>
+              <Item>
+                {" "}
+                {characterInfo.anime?.map((anime) => {
+                  return <div>{anime.anime.title}</div>;
+                })}
+              </Item>
             </Item>
             <Item>
               Mangaography:
