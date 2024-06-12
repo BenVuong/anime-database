@@ -44,6 +44,7 @@ function Details() {
   const [anime, setAnime] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showAllCharacter, setShowAllCharacter] = useState(false);
 
   /*info and set info is used to grab objects witin in the data object*/
   const [info, setInfo] = useState({
@@ -121,6 +122,13 @@ function Details() {
     []
   );
 
+  const charactersCardsToShow = showAllCharacter
+    ? characters.data
+    : characters.data?.slice(0, 12);
+
+  const handleToggle = () => {
+    setShowAllCharacter(!showAllCharacter);
+  };
   useEffect(() => {
     debouncedSetUp(id);
     return () => {
@@ -214,11 +222,14 @@ function Details() {
               </AccordionSummary>
               <AccordionDetails>
                 <Grid container>
-                  {/*add a show more characters button to show all characters*/}
-                  {characters.data?.slice(0, 12).map((anime) => {
+                  {/*add a show more characters button to show all characters Done!*/}
+                  {charactersCardsToShow?.map((anime) => {
                     return <CharacterCards anime={anime} />;
                   })}
                 </Grid>
+                <button onClick={handleToggle}>
+                  {showAllCharacter ? "Show Less" : "Show More"}
+                </button>
               </AccordionDetails>
             </Accordion>
           </Item>
