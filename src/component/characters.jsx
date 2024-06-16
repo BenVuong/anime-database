@@ -13,12 +13,32 @@ import {
   CardContent,
   CardHeader,
 } from "@mui/material";
+const debounce = (func, delay) => {
+  let timeOutID;
+  const debouncedFunction = (...args) => {
+    if (timeOutID) {
+      clearTimeout(timeOutID);
+    }
+    timeOutID = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+
+  debouncedFunction.cancel = () => {
+    if (timeOutID) {
+      clearTimeout(timeOutID);
+    }
+  };
+  return debouncedFunction;
+};
+
 function Characters() {
   const navigate = useNavigate();
   const { id } = useParams();
   const API_URL = "https://api.jikan.moe/v4";
   const [characterInfo, setCharacterInfo] = useState([]);
   const [characterImage, setCharacterImage] = useState("");
+
   async function getCharacters(id) {
     const response = await fetch(`${API_URL}/characters/${id}/full`);
     const data = await response.json();
@@ -68,6 +88,16 @@ function Characters() {
         </Grid>
         <Grid xs={12} sm={10}>
           <Item className="card-text"> {characterInfo.about}</Item>
+          <Item>
+            {" "}
+            {characterInfo.voices?.map((voices) => {
+              return (
+                <div>
+                  {voices.language} - {voices.person.name}
+                </div>
+              );
+            })}
+          </Item>
         </Grid>
       </Grid>
     </Box>
