@@ -88,15 +88,36 @@ function Characters() {
         </Grid>
         <Grid xs={12} sm={10}>
           <Item className="card-text"> {characterInfo.about}</Item>
+          <Divider />
           <Item>
-            {" "}
-            {characterInfo.voices?.map((voices) => {
-              return (
-                <div>
-                  {voices.language} - {voices.person.name}
-                </div>
-              );
-            })}
+            <Accordion>
+              <AccordionSummary
+                aria-controls="panel1-content"
+                id="panel1-header"
+              >
+                Voice Actors
+              </AccordionSummary>
+              <AccordionDetails>
+                {characterInfo.voices?.map((voices) => {
+                  return (
+                    <Item>
+                      {voices.language} - {voices.person.name}
+                    </Item>
+                  );
+                })}
+              </AccordionDetails>
+            </Accordion>
+          </Item>
+          <Item>
+            <Accordion>
+              <AccordionSummary
+                aria-controls="panel1-content"
+                id="panel1-header"
+              >
+                Character Images
+              </AccordionSummary>
+              <AccordionDetails></AccordionDetails>
+            </Accordion>
           </Item>
         </Grid>
       </Grid>
