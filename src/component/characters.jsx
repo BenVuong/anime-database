@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Title, Pillar, Item } from "./style";
 import "./../App.css";
@@ -38,19 +38,49 @@ function Characters() {
   const API_URL = "https://api.jikan.moe/v4";
   const [characterInfo, setCharacterInfo] = useState([]);
   const [characterImage, setCharacterImage] = useState("");
-
-  async function getCharacters(id) {
+  const [arrayOfImages, setArrayOfImages] = useState([]);
+  const getCharacterInfo = async (id) => {
     const response = await fetch(`${API_URL}/characters/${id}/full`);
+    if (!response.ok) {
+      throw new Error("Request failed for getCharacterInfo");
+    }
     const data = await response.json();
     setCharacterInfo(data.data);
     setCharacterImage(data.data.images.jpg.image_url);
     console.log(characterInfo);
-  }
+  };
+
+  const getCharacterImages = async (id) => {
+    const response = await fetch(`${API_URL}/characters/${id}/pictures`);
+    if (!response.ok) {
+      throw new Error("Request failed for getCharactersImages");
+    }
+    const data = await response.json();
+    setArrayOfImages(data.data);
+    console.log(arrayOfImages);
+  };
+
+  const setUp = async (id) => {
+    try {
+      await getCharacterInfo(id);
+
+      await getCharacterImages(id);
+    } catch (err) {
+      throw new Error("Request failed in setUp");
+    }
+  };
+
+  const debouncedSetUp = useCallback(
+    debounce((id) => setUp(id), 10),
+    []
+  );
 
   useEffect(() => {
-    getCharacters(id);
-    console.log(characterInfo);
-  }, []);
+    debouncedSetUp(id);
+    return () => {
+      debouncedSetUp.cancel();
+    };
+  }, [debouncedSetUp, id]);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1}>
@@ -90,7 +120,7 @@ function Characters() {
           <Item className="card-text"> {characterInfo.about}</Item>
           <Divider />
           <Item>
-            <Accordion>
+            <Accordion defaultExpanded>
               <AccordionSummary
                 aria-controls="panel1-content"
                 id="panel1-header"
@@ -109,14 +139,30 @@ function Characters() {
             </Accordion>
           </Item>
           <Item>
-            <Accordion>
+            <Accordion defaultExpanded>
               <AccordionSummary
                 aria-controls="panel1-content"
                 id="panel1-header"
               >
                 Character Images
               </AccordionSummary>
-              <AccordionDetails></AccordionDetails>
+              <AccordionDetails>
+                <Grid container wrap="nowrap" sx={{ overflowX: "scroll" }}>
+                  {arrayOfImages.map((image) => {
+                    return (
+                      <Item>
+                        <img
+                          src={image.jpg.image_url}
+                          style={{
+                            width: "auto",
+                            height: "256px",
+                          }}
+                        ></img>
+                      </Item>
+                    );
+                  })}
+                </Grid>
+              </AccordionDetails>
             </Accordion>
           </Item>
         </Grid>
