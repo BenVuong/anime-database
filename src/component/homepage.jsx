@@ -6,6 +6,7 @@ import {
   CardContent,
   CardHeader,
   Button,
+  Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Title } from "./style";
@@ -93,26 +94,29 @@ function Homepage() {
               <Card>
                 <CardContent>
                   <CardHeader
+                    style={{ textAlign: "center" }}
                     title={anime.title_english}
                     subheader={anime.title}
                   ></CardHeader>
-                  <Grid item>Score: {anime.score}</Grid>
-                  <Grid item>
-                    <img
-                      src={anime.images.jpg.large_image_url}
-                      style={{ maxWidth: "100%" }}
-                      alt={anime.title_english}
-                    ></img>
-                  </Grid>
-                  <Grid item>
-                    <Link
-                      role="button"
-                      className="btn btn-info"
-                      to={`/anime-database/details/${anime.mal_id}`}
-                    >
-                      Details
-                    </Link>
-                  </Grid>
+                  <Typography style={{ textAlign: "center" }}>
+                    <Grid item>Score: {anime.score}</Grid>
+                    <Grid item>
+                      <img
+                        src={anime.images.jpg.large_image_url}
+                        style={{ maxWidth: "100%" }}
+                        alt={anime.title_english}
+                      ></img>
+                    </Grid>
+                    <Grid item>
+                      <Link
+                        role="button"
+                        className="btn btn-info"
+                        to={`/anime-database/details/${anime.mal_id}`}
+                      >
+                        Details
+                      </Link>
+                    </Grid>
+                  </Typography>
                 </CardContent>
               </Card>
             </Grid>
