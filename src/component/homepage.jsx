@@ -16,46 +16,65 @@ function Homepage() {
   const [searchAnimeName, setSearchAnimeName] = useState("");
   const API_URL = "https://api.jikan.moe/v4";
   const [info, setInfo] = useState([]);
-  const getTopAnime = async () => {
-    const response = await fetch(`${API_URL}/top/anime?page=1`);
 
-    setAnimeData(await response.json());
-
-    setInfo(animeData.pagination);
+  const getTopAnime = async (num) => {
+    const response = await fetch(`${API_URL}/top/anime?page=${num}`);
+    const data = await response.json();
+    setAnimeData(data);
+    setInfo(data.pagination);
   };
-  const getPopularAnime = async () => {
-    const response = await fetch(`${API_URL}/top/anime?filter=bypopularity`);
-    setAnimeData(await response.json());
+
+  const getPopularAnime = async (num) => {
+    const response = await fetch(
+      `${API_URL}/top/anime?filter=bypopularity&page=${num}`
+    );
+    const data = await response.json();
+    setAnimeData(data);
   };
 
   useEffect(() => {
-    getTopAnime();
-  }, []);
+    getTopAnime(pageNum);
+  }, [pageNum]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchAnimeName === "") {
-    } else {
-      searchAnime(searchAnimeName);
+      return;
     }
+    searchAnime(searchAnimeName);
   };
 
-  async function searchAnime(search) {
+  const handleNextPage = () => {
+    setPageNum((prevPageNum) => prevPageNum + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (pageNum > 1) {
+      setPageNum((prevPageNum) => prevPageNum - 1);
+    }
+  };
+  const searchAnime = async (search) => {
     const response = await fetch(`${API_URL}/anime?q=${search}`);
     const data = await response.json();
     setAnimeData(data);
-  }
+  };
 
   return (
     <div>
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Title>Anime Database</Title>
-          <Button variant="contained" onClick={getTopAnime}>
+          <Button variant="contained" onClick={() => getTopAnime(pageNum)}>
             Top anime
           </Button>
-          <Button variant="contained" onClick={getPopularAnime}>
+          <Button variant="contained" onClick={() => getPopularAnime(pageNum)}>
             Popular anime
+          </Button>
+          <Button variant="contained" onClick={handlePrevPage}>
+            Prev Page
+          </Button>
+          <Button variant="contained" onClick={handleNextPage}>
+            Next Page
           </Button>
         </Grid>
         <Grid item xs={12}>
@@ -65,13 +84,12 @@ function Homepage() {
               label="Enter in title of an anime"
               onChange={(e) => setSearchAnimeName(e.target.value)}
             ></TextField>
-
             <button className="btn btn-success"> Search Anime</button>
           </form>
         </Grid>
         {animeData.data?.map((anime) => {
           return (
-            <Grid item xs={5} sm={3}>
+            <Grid item xs={5} sm={3} key={anime.mal_id}>
               <Card>
                 <CardContent>
                   <CardHeader
@@ -83,12 +101,13 @@ function Homepage() {
                     <img
                       src={anime.images.jpg.large_image_url}
                       style={{ maxWidth: "100%" }}
+                      alt={anime.title_english}
                     ></img>
                   </Grid>
                   <Grid item>
                     <Link
                       role="button"
-                      className="btn btn-info "
+                      className="btn btn-info"
                       to={`/anime-database/details/${anime.mal_id}`}
                     >
                       Details
@@ -103,4 +122,5 @@ function Homepage() {
     </div>
   );
 }
+
 export default Homepage;
