@@ -71,13 +71,8 @@ function Homepage() {
           <Button variant="contained" onClick={() => getPopularAnime(pageNum)}>
             Popular anime
           </Button>
-          <Button variant="contained" onClick={handlePrevPage}>
-            Prev Page
-          </Button>
-          <Button variant="contained" onClick={handleNextPage}>
-            Next Page
-          </Button>
         </Grid>
+
         <Grid item xs={12}>
           <form onSubmit={handleSearchSubmit}>
             <TextField
@@ -88,6 +83,7 @@ function Homepage() {
             <button className="btn btn-success"> Search Anime</button>
           </form>
         </Grid>
+
         {animeData.data?.map((anime) => {
           return (
             <Grid item xs={5} sm={3} key={anime.mal_id}>
@@ -123,6 +119,15 @@ function Homepage() {
           );
         })}
       </Grid>
+      <Typography style={{ textAlign: "center" }}>
+        <Button variant="contained" onClick={handlePrevPage}>
+          Prev Page
+        </Button>
+        page {info.current_page}
+        <Button variant="contained" onClick={handleNextPage}>
+          Next Page
+        </Button>
+      </Typography>
     </div>
   );
 }
