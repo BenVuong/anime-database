@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Grid,
   Card,
@@ -10,10 +10,10 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Title } from "./style";
-
+import { AnimeDBContext } from "../helper/Contexts";
 function Homepage() {
   const [animeData, setAnimeData] = useState([]);
-  const [pageNum, setPageNum] = useState(1);
+  const { pageNum, setPageNum } = useContext(AnimeDBContext);
   const [searchAnimeName, setSearchAnimeName] = useState("");
   const API_URL = "https://api.jikan.moe/v4";
   const [info, setInfo] = useState([]);
