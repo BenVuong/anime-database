@@ -7,6 +7,8 @@ import {
   CardHeader,
   Button,
   Typography,
+  Stack,
+  Pagination,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Title } from "./style";
@@ -17,12 +19,15 @@ function Homepage() {
   const [searchAnimeName, setSearchAnimeName] = useState("");
   const API_URL = "https://api.jikan.moe/v4";
   const [info, setInfo] = useState([]);
+  const [items, setItems] = useState([]);
 
   const getTopAnime = async (num) => {
     const response = await fetch(`${API_URL}/top/anime?page=${num}`);
     const data = await response.json();
     setAnimeData(data);
+    console.log(data);
     setInfo(data.pagination);
+    setItems(data.pagination.items);
   };
 
   const getPopularAnime = async (num) => {
@@ -44,7 +49,9 @@ function Homepage() {
     }
     searchAnime(searchAnimeName);
   };
-
+  const handleChange = (event, value) => {
+    setPageNum(value);
+  };
   const handleNextPage = () => {
     setPageNum((prevPageNum) => prevPageNum + 1);
   };
@@ -119,14 +126,14 @@ function Homepage() {
           );
         })}
       </Grid>
-      <Typography style={{ textAlign: "center" }}>
-        <Button variant="contained" onClick={handlePrevPage}>
-          Prev Page
-        </Button>
-        page {info.current_page}
-        <Button variant="contained" onClick={handleNextPage}>
-          Next Page
-        </Button>
+
+      <Typography style={{ textAlign: "center" }}>Page: {pageNum} </Typography>
+      <Typography style={{ alignItems: "center" }}>
+        <Pagination
+          count={info.last_visible_page}
+          page={pageNum}
+          onChange={handleChange}
+        />
       </Typography>
     </div>
   );
